@@ -35,25 +35,42 @@ export const retrieveRegion = async (id: string) => {
 const regionMap = new Map<string, HttpTypes.StoreRegion>()
 
 export const getRegion = async (countryCode: string) => {
-  if (regionMap.has(countryCode)) {
-    return regionMap.get(countryCode)
-  }
+  try {
+    if (regionMap.has(countryCode)) {
+      return regionMap.get(countryCode)
+    }
 
-  const regions = await listRegions()
+    const regions = await listRegions()
 
-  if (!regions) {
-    return null
-  }
+    if (!regions) {
+      return null
+    }
 
-  regions.forEach((region) => {
-    region.countries?.forEach((c) => {
-      regionMap.set(c?.iso_2 ?? "", region)
+    regions.forEach((region) => {
+      region.countries?.forEach((c) => {
+        regionMap.set(c?.iso_2 ?? "", region)
+      })
     })
-  })
 
-  const region = countryCode
-    ? regionMap.get(countryCode)
-    : regionMap.get("us")
+    const region = countryCode
+      ? regionMap.get(countryCode)
+      : regionMap.get("pe")
 
-  return region
+    return region
+  } catch {
+    return {
+      id: "reg_fake_peru",
+      name: "Perú",
+      currency_code: "pen",
+      countries: [
+        {
+          iso_2: "pe",
+          iso_3: "per",
+          num_code: "604",
+          name: "Perú",
+          display_name: "Perú",
+        },
+      ],
+    } as HttpTypes.StoreRegion
+  }
 }
