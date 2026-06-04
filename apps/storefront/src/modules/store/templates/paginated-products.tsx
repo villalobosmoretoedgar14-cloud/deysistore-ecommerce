@@ -12,6 +12,7 @@ type PaginatedProductsParams = {
   category_id?: string[]
   id?: string[]
   order?: string
+  q?: string
 }
 
 export default async function PaginatedProducts({
@@ -21,6 +22,7 @@ export default async function PaginatedProducts({
   categoryId,
   productsIds,
   countryCode,
+  query,
 }: {
   sortBy?: SortOptions
   page: number
@@ -28,9 +30,10 @@ export default async function PaginatedProducts({
   categoryId?: string
   productsIds?: string[]
   countryCode: string
+  query?: string
 }) {
   const queryParams: PaginatedProductsParams = {
-    limit: 12,
+    limit: PRODUCT_LIMIT,
   }
 
   if (collectionId) {
@@ -47,6 +50,10 @@ export default async function PaginatedProducts({
 
   if (sortBy === "created_at") {
     queryParams["order"] = "created_at"
+  }
+
+  if (query) {
+    queryParams["q"] = query
   }
 
   const region = await getRegion(countryCode)
@@ -68,18 +75,31 @@ export default async function PaginatedProducts({
 
   return (
     <>
-      <ul
-        className="grid grid-cols-2 w-full small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8"
-        data-testid="products-list"
-      >
-        {products.map((p) => {
-          return (
-            <li key={p.id}>
-              <ProductPreview product={p} region={region} />
-            </li>
-          )
-        })}
-      </ul>
+      {query && (
+        <p className="mb-6 text-small-regular text-ui-fg-subtle">
+          Resultados para: <span className="font-semibold">{query}</span>
+        </p>
+      )}
+
+      {products.length === 0 ? (
+        <div className="py-16 text-center text-ui-fg-subtle">
+          No encontramos productos con esa búsqueda.
+        </div>
+      ) : (
+        <ul
+          className="grid grid-cols-2 w-full small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8"
+          data-testid="products-list"
+        >
+          {products.map((p) => {
+            return (
+              <li key={p.id}>
+                <ProductPreview product={p} region={region} />
+              </li>
+            )
+          })}
+        </ul>
+      )}
+
       {totalPages > 1 && (
         <Pagination
           data-testid="product-pagination"

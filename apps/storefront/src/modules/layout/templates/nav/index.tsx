@@ -3,12 +3,13 @@ import { User, ShoppingBag, MagnifyingGlass, Heart } from "@medusajs/icons"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
+import SearchBar from "@modules/layout/components/search-bar"
 
 export default async function Nav() {
   return (
     <div className="sticky top-0 inset-x-0 z-50 bg-white">
       <header className="border-b border-ui-border-base">
-        <nav className="content-container h-20 flex items-center justify-between">
+        <nav className="content-container h-20 flex items-center justify-between gap-8">
           <div className="flex items-center gap-10">
             <LocalizedClientLink
               href="/"
@@ -21,15 +22,19 @@ export default async function Nav() {
               <LocalizedClientLink href="/store" className="hover:text-pink-600">
                 Ofertas
               </LocalizedClientLink>
+
               <LocalizedClientLink href="/store" className="hover:text-pink-600">
                 Novedades
               </LocalizedClientLink>
+
               <LocalizedClientLink href="/store" className="hover:text-pink-600">
                 Accesorios
               </LocalizedClientLink>
+
               <LocalizedClientLink href="/store" className="hover:text-pink-600">
                 Snacks
               </LocalizedClientLink>
+
               <LocalizedClientLink href="/store" className="hover:text-pink-600">
                 Regalos
               </LocalizedClientLink>
@@ -37,7 +42,12 @@ export default async function Nav() {
           </div>
 
           <div className="flex items-center gap-5">
-            <LocalizedClientLink href="/store" className="hover:text-black">
+            <SearchBar />
+
+            <LocalizedClientLink
+              href="/store"
+              className="xl:hidden hover:text-black"
+            >
               <MagnifyingGlass className="w-7 h-7" />
             </LocalizedClientLink>
 
