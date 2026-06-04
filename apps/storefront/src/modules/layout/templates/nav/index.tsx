@@ -1,68 +1,63 @@
 import { Suspense } from "react"
+import { User, ShoppingBag, MagnifyingGlass, Heart } from "@medusajs/icons"
 
-import {
-  User,
-  ShoppingBag,
-  MagnifyingGlass
-} from "@medusajs/icons"
-import { listLocales } from "@lib/data/locales"
-import { getLocale } from "@lib/data/locale-actions"
-import { listRegions } from "@lib/data/regions"
-import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
-import SideMenu from "@modules/layout/components/side-menu"
 
 export default async function Nav() {
-  const [regions, locales, currentLocale] = await Promise.all([
-    listRegions().then((regions: StoreRegion[]) => regions),
-    listLocales(),
-    getLocale(),
-  ])
-
   return (
-    <div className="sticky top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
-        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
-          <div className="flex-1 basis-0 h-full flex items-center">
-            <div className="h-full">
-              <SideMenu regions={regions} locales={locales} currentLocale={currentLocale} />
-            </div>
-          </div>
-
-          <div className="flex items-center h-full">
+    <div className="sticky top-0 inset-x-0 z-50 bg-white">
+      <header className="border-b border-ui-border-base">
+        <nav className="content-container h-20 flex items-center justify-between">
+          <div className="flex items-center gap-10">
             <LocalizedClientLink
               href="/"
-              className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
-              data-testid="nav-store-link"
+              className="text-2xl font-bold tracking-[0.12em] text-black"
             >
               DEYSISTORE
             </LocalizedClientLink>
+
+            <div className="hidden lg:flex items-center gap-8 text-sm font-semibold uppercase tracking-wide text-gray-800">
+              <LocalizedClientLink href="/store" className="hover:text-pink-600">
+                Ofertas
+              </LocalizedClientLink>
+              <LocalizedClientLink href="/store" className="hover:text-pink-600">
+                Novedades
+              </LocalizedClientLink>
+              <LocalizedClientLink href="/store" className="hover:text-pink-600">
+                Accesorios
+              </LocalizedClientLink>
+              <LocalizedClientLink href="/store" className="hover:text-pink-600">
+                Snacks
+              </LocalizedClientLink>
+              <LocalizedClientLink href="/store" className="hover:text-pink-600">
+                Regalos
+              </LocalizedClientLink>
+            </div>
           </div>
 
-          <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
-            <div className="hidden small:flex items-center gap-x-6 h-full">
-              <LocalizedClientLink
-                className="hover:text-ui-fg-base"
-                href="/account"
-                data-testid="nav-account-link"
-                >   
-                  <User className="w-7 h-7" />
-          </LocalizedClientLink>
-            </div>
-           <Suspense
-  fallback={
-    <LocalizedClientLink
-      className="hover:text-ui-fg-base flex gap-2"
-      href="/cart"
-      data-testid="nav-cart-link"
-    >
-      🛍️
-    </LocalizedClientLink>
-  }
->
-  <CartButton />
-</Suspense>
+          <div className="flex items-center gap-5">
+            <LocalizedClientLink href="/store" className="hover:text-black">
+              <MagnifyingGlass className="w-7 h-7" />
+            </LocalizedClientLink>
+
+            <LocalizedClientLink href="/account" className="hover:text-black">
+              <User className="w-7 h-7" />
+            </LocalizedClientLink>
+
+            <button className="hidden sm:block hover:text-black">
+              <Heart className="w-7 h-7" />
+            </button>
+
+            <Suspense
+              fallback={
+                <LocalizedClientLink href="/cart" className="hover:text-black">
+                  <ShoppingBag className="w-7 h-7" />
+                </LocalizedClientLink>
+              }
+            >
+              <CartButton />
+            </Suspense>
           </div>
         </nav>
       </header>
